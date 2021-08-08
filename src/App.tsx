@@ -3,6 +3,7 @@
 /* eslint-disable import/no-cycle */
 /** ------------------------ */
 
+import {ChakraProvider} from '@chakra-ui/react';
 import React, {createContext, useEffect, useState} from 'react';
 import {BrowserRouter as Router, Redirect, Route, Switch} from 'react-router-dom';
 
@@ -62,21 +63,23 @@ export const App: React.FC = () => {
   };
 
   return (
-    <Router>
-      <GlobalContext.Provider value={{isSignedIn, setIsSignedIn, currentUser, setCurrentUser}}>
-        <CommonLayout>
-          <Switch>
-            <Route exact component={Login} path="/login" />
-            <Route exact component={SignUp} path="/signup" />
-            <Private>
-              <Switch>
-                <Route exact component={Home} path="/" />
-              </Switch>
-            </Private>
-          </Switch>
-        </CommonLayout>
-      </GlobalContext.Provider>
-    </Router>
+    <ChakraProvider>
+      <Router>
+        <GlobalContext.Provider value={{isSignedIn, setIsSignedIn, currentUser, setCurrentUser}}>
+          <CommonLayout>
+            <Switch>
+              <Route exact component={Login} path="/login" />
+              <Route exact component={SignUp} path="/signup" />
+              <Private>
+                <Switch>
+                  <Route exact component={Home} path="/" />
+                </Switch>
+              </Private>
+            </Switch>
+          </CommonLayout>
+        </GlobalContext.Provider>
+      </Router>
+    </ChakraProvider>
   );
 };
 

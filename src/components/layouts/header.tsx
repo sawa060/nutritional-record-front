@@ -1,12 +1,6 @@
 /* eslint-disable import/no-cycle */
 
-import AppBar from '@material-ui/core/AppBar';
-import Button from '@material-ui/core/Button';
-import IconButton from '@material-ui/core/IconButton';
-import {makeStyles, Theme} from '@material-ui/core/styles';
-import Toolbar from '@material-ui/core/Toolbar';
-import Typography from '@material-ui/core/Typography';
-import MenuIcon from '@material-ui/icons/Menu';
+import {Box, Button, Flex, Heading} from '@chakra-ui/react';
 import Cookies from 'js-cookie';
 import {useContext} from 'react';
 import {Link, useHistory} from 'react-router-dom';
@@ -14,23 +8,9 @@ import {Link, useHistory} from 'react-router-dom';
 import {GlobalContext} from '../../App';
 import {signOut} from '../../lib/api/auth';
 
-const useStyles = makeStyles((theme: Theme) => ({
-  iconButton: {
-    marginRight: theme.spacing(2),
-  },
-  title: {
-    flexGrow: 1,
-    textDecoration: 'none',
-    color: 'inherit',
-  },
-  linkBtn: {
-    textTransform: 'none',
-  },
-}));
-
 export const Header = (): JSX.Element => {
-  const {isSignedIn, setIsSignedIn} = useContext(GlobalContext);
-  const classes = useStyles();
+  const {isSignedIn, setIsSignedIn, currentUser} = useContext(GlobalContext);
+
   const history = useHistory();
 
   // TODO 後でhooksに切り出す
@@ -45,7 +25,7 @@ export const Header = (): JSX.Element => {
         Cookies.remove('_uid');
 
         setIsSignedIn(false);
-        history.push('/signin');
+        history.push('/login');
       }
     } catch (error) {
       // TODO error handling
@@ -59,29 +39,38 @@ export const Header = (): JSX.Element => {
      */
     if (isSignedIn) {
       return (
-        <Button className={classes.linkBtn} color="inherit" onClick={handleSignOut}>
-          サインアウト
+        <Button colorScheme="white" size="sm" variant="ghost" onClick={handleSignOut}>
+          ログアウト
         </Button>
       );
     }
     return (
-      <Button className={classes.linkBtn} color="inherit" component={Link} to="/login">
-        サインイン
+      <Button colorScheme="white" component={Link} size="sm" to="/login" variant="ghost">
+        ログイン
       </Button>
     );
   };
 
   return (
-    <AppBar position="static">
-      <Toolbar>
-        <IconButton className={classes.iconButton} color="inherit" edge="start">
-          <MenuIcon />
-        </IconButton>
-        <Typography className="classes.title" component={Link} to="/" variant="h6">
-          Sample
-        </Typography>
-        <AuthButtons />
-      </Toolbar>
-    </AppBar>
+    <Flex
+      align="center"
+      as="nav"
+      bgColor="teal.500"
+      color="white"
+      justify="space-between"
+      padding={4}
+      w="100%"
+      wrap="wrap"
+    >
+      <Heading as="p" fontSize={{base: 'md', md: '2xl'}} fontWeight="bold">
+        Nutrition Record
+      </Heading>
+      <Flex align="center" ml="auto">
+        <Box as="p" mr={2}>
+          {currentUser?.name}
+        </Box>
+        <Box>{AuthButtons()}</Box>
+      </Flex>
+    </Flex>
   );
 };
