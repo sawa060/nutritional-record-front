@@ -1,11 +1,13 @@
 /* eslint-disable import/no-cycle */
 import {Box, Flex} from '@chakra-ui/react';
 import React, {useContext} from 'react';
+import {useHistory} from 'react-router-dom';
 
 import {GlobalContext} from '../App';
 
 export const Home: React.FC = () => {
   const {isSignedIn, currentUser} = useContext(GlobalContext);
+  const history = useHistory();
 
   return (
     <>
@@ -53,6 +55,7 @@ export const Home: React.FC = () => {
             justifyContent="center"
             m={2}
             w={300}
+            onClick={() => history.push('/patients')}
           >
             <Box as="p">患者一覧</Box>
           </Flex>

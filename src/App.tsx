@@ -12,6 +12,7 @@ import {User} from './features/auth/auth_types';
 import {getCurrentUser} from './lib/api/auth';
 import {Home} from './pages/home';
 import {Login} from './pages/login';
+import {Patients} from './pages/patients';
 import {SignUp} from './pages/sign_up';
 
 // グローバルで扱う変数、関数
@@ -73,6 +74,7 @@ export const App: React.FC = () => {
               <Private>
                 <Switch>
                   <Route exact component={Home} path="/" />
+                  <Route exact component={Patients} path="/patients" />
                 </Switch>
               </Private>
             </Switch>
