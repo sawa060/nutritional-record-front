@@ -1,17 +1,18 @@
 /* eslint-disable import/no-cycle */
 import {Box, Flex} from '@chakra-ui/react';
-import React, {useContext} from 'react';
+import React from 'react';
 import {useHistory} from 'react-router-dom';
-
-import {GlobalContext} from '../App';
+import {useLogin} from 'src/features/auth/hooks/use_is_login';
+// import {useGlobalContext} from 'src/features/common/global_context';
 
 export const Home: React.FC = () => {
-  const {isSignedIn, currentUser} = useContext(GlobalContext);
+  // const {currentUser} = useGlobalContext();
   const history = useHistory();
+  const isLogin = useLogin();
 
   return (
     <>
-      {isSignedIn && currentUser ? (
+      {isLogin ? (
         <Flex justifyContent="center" wrap="wrap">
           <Flex
             _hover={{

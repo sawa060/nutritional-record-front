@@ -5,11 +5,11 @@ import CardContent from '@material-ui/core/CardContent';
 import CardHeader from '@material-ui/core/CardHeader';
 import {makeStyles, Theme} from '@material-ui/core/styles';
 import TextField from '@material-ui/core/TextField';
-import Cookies from 'js-cookie';
-import React, {useContext, useState} from 'react';
+import React, {useState} from 'react';
 import {useHistory} from 'react-router-dom';
+import {useGlobalContext} from 'src/features/common/global_context';
+import {TokenStorage} from 'src/lib/token_storage';
 
-import {GlobalContext} from '../App';
 import {AlertMessage} from '../components/utils/alert_message';
 import {SignUpData} from '../features/auth';
 import {signUp} from '../lib/api/auth';
@@ -37,7 +37,7 @@ export const SignUp: React.FC = () => {
   const classes = useStyles();
   const history = useHistory();
 
-  const {setIsSignedIn, setCurrentUser} = useContext(GlobalContext);
+  const {setCurrentUser} = useGlobalContext();
 
   const [name, setName] = useState<string>('');
   const [email, setEmail] = useState<string>('');
@@ -60,12 +60,12 @@ export const SignUp: React.FC = () => {
 
       if (res.status === 200) {
         // アカウント作成と同時にサインインさせてしまう
-        // 本来であればメール確認などを挟むべきだが、今回はサンプルなので
-        Cookies.set('_access_token', res.headers['access-token']);
-        Cookies.set('_client', res.headers.client);
-        Cookies.set('_uid', res.headers.uid);
+        // 本来であればメール確認などを挟むべきなのであとで実装する
 
-        setIsSignedIn(true);
+        TokenStorage.setAccessToken(res.headers['access-token']);
+        TokenStorage.setClient(res.headers.client);
+        TokenStorage.setUid(res.headers.uid);
+
         setCurrentUser(res.data.data);
 
         history.push('/');

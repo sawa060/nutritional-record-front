@@ -1,4 +1,5 @@
 import Cookies from 'js-cookie';
+import {TokenStorage} from 'src/lib/token_storage';
 
 import {SignInData, SignUpData} from '../../../features/auth/auth_types';
 import {client} from '../client';
@@ -13,9 +14,9 @@ export const signIn = (data: SignInData) => client.post('auth/sign_in', data);
 export const signOut = () =>
   client.delete('auth/sign_out', {
     headers: {
-      'access-token': Cookies.get('_access-token'),
-      client: Cookies.get('_client'),
-      uid: Cookies.get('_uid'),
+      'access-token': TokenStorage.getAccessToken(),
+      client: TokenStorage.getClient(),
+      uid: TokenStorage.getUid(),
     },
   });
 

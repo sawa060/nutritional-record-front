@@ -7,11 +7,12 @@ import CardContent from '@material-ui/core/CardContent';
 import CardHeader from '@material-ui/core/CardHeader';
 import {makeStyles, Theme} from '@material-ui/core/styles';
 import TextField from '@material-ui/core/TextField';
-import Cookies from 'js-cookie';
-import React, {useContext, useState} from 'react';
+import React, {useState} from 'react';
 import {Link, useHistory} from 'react-router-dom';
+import {useGlobalContext} from 'src/features/common/global_context';
+import {LocalStorageAdapter} from 'src/lib/local_storage/local_storage_adapter';
+import {TokenStorage} from 'src/lib/token_storage/token_storage';
 
-import {GlobalContext} from '../App';
 import {AlertMessage} from '../components/utils/alert_message';
 import {SignInData} from '../features/auth';
 import {signIn} from '../lib/api/auth';
@@ -45,7 +46,7 @@ export const Login: React.FC = () => {
   const classes = useStyles();
   const history = useHistory();
 
-  const {setIsSignedIn, setCurrentUser} = useContext(GlobalContext);
+  const {setCurrentUser} = useGlobalContext();
 
   const [email, setEmail] = useState<string>('');
   const [password, setPassword] = useState<string>('');
@@ -64,11 +65,12 @@ export const Login: React.FC = () => {
 
       if (res.status === 200) {
         // 成功した場合はCookieに各値を格納
-        Cookies.set('_access_token', res.headers['access-token']);
-        Cookies.set('_client', res.headers.client);
-        Cookies.set('_uid', res.headers.uid);
+        TokenStorage.setAccessToken(res.headers['access-token']);
+        TokenStorage.setClient(res.headers.client);
+        TokenStorage.setUid(res.headers.uid);
 
-        setIsSignedIn(true);
+        LocalStorageAdapter.set('currentUser', res.data.data);
+
         setCurrentUser(res.data.data);
 
         history.push('/');

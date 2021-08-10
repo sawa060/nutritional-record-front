@@ -2,31 +2,28 @@
 
 import {Box, Button, Flex, Heading} from '@chakra-ui/react';
 import Cookies from 'js-cookie';
-import {useContext} from 'react';
 import {Link, useHistory} from 'react-router-dom';
+import {useLogin} from 'src/features/auth/hooks/use_is_login';
+import {useGlobalContext} from 'src/features/common/global_context';
 
-import {GlobalContext} from '../../App';
 import {signOut} from '../../lib/api/auth';
 
 export const Header = (): JSX.Element => {
-  const {isSignedIn, setIsSignedIn, currentUser} = useContext(GlobalContext);
+  const {currentUser} = useGlobalContext();
 
   const history = useHistory();
 
-  // TODO 後でhooksに切り出す
+  // TODO 後でhooksに切り出す & 各hooksに置き換え
   const handleSignOut = async () => {
     try {
-      const res = await signOut();
+      await signOut();
 
       /* eslint-disable no-console */
-      if (res.data.success) {
-        Cookies.remove('_access_token');
-        Cookies.remove('_client');
-        Cookies.remove('_uid');
+      Cookies.remove('_access_token');
+      Cookies.remove('_client');
+      Cookies.remove('_uid');
 
-        setIsSignedIn(false);
-        history.push('/login');
-      }
+      history.push('/login');
     } catch (error) {
       // TODO error handling
       console.log(error);
@@ -37,7 +34,7 @@ export const Header = (): JSX.Element => {
     /** 認証完了後はサインアウトのボタンを表示
      * も認証時は認証用のボタンを表示
      */
-    if (isSignedIn) {
+    if (useLogin()) {
       return (
         <Button colorScheme="white" size="sm" variant="ghost" onClick={handleSignOut}>
           ログアウト
