@@ -7,7 +7,6 @@ import {ChakraProvider} from '@chakra-ui/react';
 import React, {useEffect} from 'react';
 import {BrowserRouter as Router, Redirect, Route, Switch} from 'react-router-dom';
 
-import {CommonLayout} from './components/layouts/common_layout';
 import {useLogin} from './features/auth/hooks/use_is_login';
 import {GlobalContextProvider, useGlobalContext} from './features/common/global_context';
 import {getCurrentUser} from './lib/api/auth';
@@ -58,18 +57,16 @@ export const App: React.FC = () => {
     <ChakraProvider>
       <Router>
         <GlobalContextProvider>
-          <CommonLayout>
-            <Switch>
-              <Route exact component={Login} path="/login" />
-              <Route exact component={SignUp} path="/signup" />
-              <Private>
-                <Switch>
-                  <Route exact component={Home} path="/" />
-                  <Route exact component={Patients} path="/patients" />
-                </Switch>
-              </Private>
-            </Switch>
-          </CommonLayout>
+          <Switch>
+            <Route exact component={Login} path="/login" />
+            <Route exact component={SignUp} path="/signup" />
+            <Private>
+              <Switch>
+                <Route exact component={Home} path="/" />
+                <Route exact component={Patients} path="/patients" />
+              </Switch>
+            </Private>
+          </Switch>
         </GlobalContextProvider>
       </Router>
     </ChakraProvider>

@@ -16,7 +16,7 @@ interface BreadcrumbItemProps {
   breadCrumbLinkProps?: ChakraBreadcrumbLinkProps;
 }
 
-interface BreadCrumbProps {
+export interface BreadCrumbProps {
   breadCrumbs: BreadcrumbItemProps[];
   breadCrumbProps?: ChakraBreadcrumbProps;
 }
@@ -27,7 +27,7 @@ export const Breadcrumb = forwardRef<HTMLElement, BreadCrumbProps>(
       {breadCrumbs.map((item, index) => (
         // eslint-disable-next-line react/no-array-index-key
         <BreadcrumbItem key={index} isCurrentPage={item.isCurrent} {...item.breadCrumbItemProps}>
-          <BreadcrumbLink href={item.href} {...item.breadCrumbLinkProps}>
+          <BreadcrumbLink fontSize="sm" href={item.href} {...item.breadCrumbLinkProps}>
             {item.text}
           </BreadcrumbLink>
         </BreadcrumbItem>

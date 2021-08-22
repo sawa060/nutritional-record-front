@@ -73,7 +73,7 @@ export const Login: React.FC = () => {
 
         setCurrentUser(res.data.data);
 
-        history.push('/');
+        history.replace('/');
       } else {
         setAlertMessageOpen(true);
       }

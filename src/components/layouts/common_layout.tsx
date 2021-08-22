@@ -1,36 +1,34 @@
 /* eslint-disable import/no-cycle */
-import {Container, Grid} from '@material-ui/core';
-import {makeStyles} from '@material-ui/core/styles';
+import {Container, Grid} from '@chakra-ui/react';
 import React from 'react';
+import {Breadcrumb, BreadCrumbProps} from 'src/components/common/breadcrumb';
 
 import {Header} from './header';
 
-const useStyles = makeStyles(() => ({
-  container: {
-    marginTop: '3rem',
-  },
-}));
-
 interface CommonLayoutProps {
   children: React.ReactElement;
+  breadCrumbs: BreadCrumbProps['breadCrumbs'];
 }
 
 // 全てのページで共通となるレイアウト
-export const CommonLayout = ({children}: CommonLayoutProps) => {
-  const classes = useStyles();
-
-  return (
-    <>
-      <header>
-        <Header />
-      </header>
-      <main>
-        <Container className={classes.container} maxWidth="lg">
-          <Grid container justifyContent="center">
-            <Grid item>{children}</Grid>
-          </Grid>
-        </Container>
-      </main>
-    </>
-  );
-};
+export const CommonLayout = ({children, breadCrumbs}: CommonLayoutProps) => (
+  <>
+    <header>
+      <Header />
+      <Breadcrumb
+        breadCrumbProps={{
+          mt: 2,
+          ml: 4,
+        }}
+        breadCrumbs={breadCrumbs}
+      />
+    </header>
+    <main>
+      <Container maxWidth="container.lg" mt={2}>
+        <Grid container justifyContent="center">
+          <Grid item>{children}</Grid>
+        </Grid>
+      </Container>
+    </main>
+  </>
+);
